@@ -11,7 +11,7 @@
 #include "Base64.h"
 #include "Utf8.h"
 
-#include <jsinspector-modern/network/NetworkReporter.h>
+#include <jsinspector-modern/network/NetworkHandler.h>
 
 #include <sstream>
 #include <tuple>
@@ -272,21 +272,21 @@ bool NetworkIOAgent::handleRequest(
   }
 
   if (InspectorFlags::getInstance().getNetworkInspectionEnabled()) {
-    auto& networkReporter = NetworkReporter::getInstance();
+    auto& networkHandler = NetworkHandler::getInstance();
 
     // @cdp Network.enable support is experimental.
     if (req.method == "Network.enable") {
-      networkReporter.setFrontendChannel(frontendChannel_);
-      networkReporter.enableDebugging();
-      frontendChannel_(cdp::jsonResult(req.id));
-      return true;
+      networkHandler.setFrontendChannel(frontendChannel_);
+      networkHandler.enable();
+      // NOTE: Domain enable/disable responses are sent by HostAgent.
+      return false;
     }
 
     // @cdp Network.disable support is experimental.
     if (req.method == "Network.disable") {
-      networkReporter.disableDebugging();
-      frontendChannel_(cdp::jsonResult(req.id));
-      return true;
+      networkHandler.disable();
+      // NOTE: Domain enable/disable responses are sent by HostAgent.
+      return false;
     }
 
     // @cdp Network.getResponseBody support is experimental.
@@ -497,18 +497,19 @@ void NetworkIOAgent::handleGetResponseBody(const cdp::PreparsedRequest& req) {
     return;
   }
 
-  auto& networkReporter = NetworkReporter::getInstance();
+  auto& networkHandler = NetworkHandler::getInstance();
 
-  if (!networkReporter.isDebuggingEnabled()) {
-    frontendChannel_(cdp::jsonError(
-        requestId,
-        cdp::ErrorCode::InvalidRequest,
-        "Invalid request: The \"Network\" domain is not enabled."));
+  if (!networkHandler.isEnabled()) {
+    frontendChannel_(
+        cdp::jsonError(
+            requestId,
+            cdp::ErrorCode::InvalidRequest,
+            "Invalid request: The \"Network\" domain is not enabled."));
     return;
   }
 
   auto storedResponse =
-      networkReporter.getResponseBody(req.params.at("requestId").asString());
+      networkHandler.getResponseBody(req.params.at("requestId").asString());
 
   if (!storedResponse) {
     frontendChannel_(cdp::jsonError(
