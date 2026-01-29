@@ -68,7 +68,7 @@ Scheduler::Scheduler(
   if (ReactNativeFeatureFlags::enableBridgelessArchitecture() &&
       ReactNativeFeatureFlags::cdpInteractionMetricsEnabled()) {
     cdpMetricsReporter_.emplace(CdpMetricsReporter{runtimeExecutor_});
-    performanceEntryReporter_->addEventTimingListener(&*cdpMetricsReporter_);
+    performanceEntryReporter_->addEventListener(&*cdpMetricsReporter_);
   }
 
   eventPerformanceLogger_ =
@@ -204,7 +204,7 @@ Scheduler::~Scheduler() {
   uiManager_->setAnimationDelegate(nullptr);
 
   if (cdpMetricsReporter_) {
-    performanceEntryReporter_->removeEventTimingListener(&*cdpMetricsReporter_);
+    performanceEntryReporter_->removeEventListener(&*cdpMetricsReporter_);
   }
 
   // Then, let's verify that the requirement was satisfied.

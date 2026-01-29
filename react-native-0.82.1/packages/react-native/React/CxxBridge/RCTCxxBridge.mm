@@ -62,7 +62,7 @@
 #import <React/RCTDevLoadingViewProtocol.h>
 #endif
 
-#ifndef RCT_FIT_RM_OLD_RUNTIME
+#ifndef RCT_REMOVE_LEGACY_ARCH
 
 static NSString *const RCTJSThreadName = @"com.facebook.react.JavaScript";
 
@@ -183,7 +183,7 @@ static void registerPerformanceLoggerHooks(RCTPerformanceLogger *performanceLogg
 
 struct RCTInstanceCallback : public InstanceCallback {
   __weak RCTCxxBridge *bridge_;
-  RCTInstanceCallback(RCTCxxBridge *bridge) : bridge_(bridge){};
+  RCTInstanceCallback(RCTCxxBridge *bridge) : bridge_(bridge) {};
   void onBatchComplete() override
   {
     [bridge_ batchDidComplete];
@@ -1586,7 +1586,7 @@ RCT_NOT_IMPLEMENTED(-(instancetype)initWithBundleURL
 
 @end
 
-#else // RCT_FIT_RM_OLD_RUNTIME
+#else // RCT_REMOVE_LEGACY_ARCH
 @implementation RCTCxxBridge
 @end
-#endif // RCT_FIT_RM_OLD_RUNTIME
+#endif // RCT_REMOVE_LEGACY_ARCH

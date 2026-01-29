@@ -133,7 +133,7 @@ NSMutableDictionary<NSString *, id> *RCTModuleConstantsForDestructuredComponent(
   return moduleConstants;
 }
 
-#ifndef RCT_FIT_RM_OLD_RUNTIME
+#ifndef RCT_REMOVE_LEGACY_ARCH
 
 static void RCTTraverseViewNodes(id<RCTComponent> view, void (^block)(id<RCTComponent>))
 {
@@ -670,12 +670,11 @@ static NSDictionary *deviceOrientationEventBody(UIDeviceOrientation orientation)
     for (RCTShadowView *shadowView in affectedShadowViews) {
       reactTags[index] = shadowView.reactTag;
       RCTLayoutMetrics layoutMetrics = shadowView.layoutMetrics;
-      frameDataArray[index++] = (RCTFrameData){
-          layoutMetrics.frame,
-          layoutMetrics.layoutDirection,
-          shadowView.isNewView,
-          shadowView.superview.isNewView,
-          layoutMetrics.displayType};
+      frameDataArray[index++] = (RCTFrameData){layoutMetrics.frame,
+                                               layoutMetrics.layoutDirection,
+                                               shadowView.isNewView,
+                                               shadowView.superview.isNewView,
+                                               layoutMetrics.displayType};
     }
   }
 
@@ -1645,7 +1644,7 @@ static UIView *_jsResponder;
 
 @end
 
-#else // RCT_FIT_RM_OLD_RUNTIME
+#else // RCT_REMOVE_LEGACY_ARCH
 
 @implementation RCTUIManager
 - (void)registerRootViewTag:(NSNumber *)rootTag
@@ -1749,7 +1748,7 @@ static UIView *_jsResponder;
 
 @end
 
-#endif // RCT_FIT_RM_OLD_RUNTIME
+#endif // RCT_REMOVE_LEGACY_ARCH
 
 UIView *RCTPaperViewOrCurrentView(UIView *view)
 {

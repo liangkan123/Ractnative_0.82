@@ -113,7 +113,7 @@ class [[deprecated(
   void flush() override;
 
  private:
-#ifndef RCT_FIT_RM_OLD_RUNTIME
+#ifndef RCT_REMOVE_LEGACY_ARCH
   class NativeModuleProxy;
 
   void bindBridge();
@@ -134,7 +134,7 @@ class [[deprecated(
   std::optional<jsi::Function> callFunctionReturnFlushedQueue_;
   std::optional<jsi::Function> invokeCallbackAndReturnFlushedQueue_;
   std::optional<jsi::Function> flushedQueue_;
-#endif // RCT_FIT_RM_OLD_RUNTIME
+#endif // RCT_REMOVE_LEGACY_ARCH
 };
 
 using Logger =

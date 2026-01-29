@@ -15,9 +15,8 @@
 
 namespace facebook::react {
 
-#ifndef RCT_FIT_RM_OLD_RUNTIME
-struct [[deprecated(
-    "This API will be removed along with the legacy architecture.")]] MethodDescriptor {
+#ifndef RCT_REMOVE_LEGACY_ARCH
+struct [[deprecated("This API will be removed along with the legacy architecture.")]] MethodDescriptor {
   std::string name;
   // type is one of js MessageQueue.MethodTypes
   std::string type;
@@ -25,13 +24,12 @@ struct [[deprecated(
   MethodDescriptor(std::string n, std::string t)
       : name(std::move(n)), type(std::move(t)) {}
 };
-#endif // RCT_FIT_RM_OLD_RUNTIME
+#endif // RCT_REMOVE_LEGACY_ARCH
 
 using MethodCallResult = std::optional<folly::dynamic>;
 
-#ifndef RCT_FIT_RM_OLD_RUNTIME
-class [[deprecated(
-    "This API will be removed along with the legacy architecture.")]] NativeModule {
+#ifndef RCT_REMOVE_LEGACY_ARCH
+class [[deprecated("This API will be removed along with the legacy architecture.")]] NativeModule {
  public:
   virtual ~NativeModule() = default;
   virtual std::string getName() = 0;
@@ -44,6 +42,6 @@ class [[deprecated(
       unsigned int reactMethodId,
       folly::dynamic&& args) = 0;
 };
-#endif // RCT_FIT_RM_OLD_RUNTIME
+#endif // RCT_REMOVE_LEGACY_ARCH
 
 } // namespace facebook::react
